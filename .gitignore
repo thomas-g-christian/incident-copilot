@@ -1,0 +1,16 @@
+.env
+.venv/
+.idea/
+python/.venv/
+**/__pycache__/
+*.pyc
+csharp/bin/
+csharp/obj/
+*.user
+*.suo
+.vs/
+artifacts/
+logs/
+*.jsonl
+!evals/cases.jsonl
+!evals/cases.example.jsonl

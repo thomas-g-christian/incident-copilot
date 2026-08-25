@@ -1,3 +1,25 @@
+# IIS HTTP status codes
+
+Use this catalog when the incident is an IIS / ASP.NET site status (401.x, 403.x, 404.x, 500.x, 502.x, 503.x). Substatus lives in the IIS log (`sc-status` and `sc-substatus`), not always in the browser.
+
+## Support next steps (incident copilot)
+
+1. Get the **status and substatus** from the IIS log (W3C: `sc-status sc-substatus sc-win32-status`). Browser “500” is not enough.
+2. Common hits:
+   - **401.1 / 401.2** — logon / auth config (then see `okta_auth.md` if SSO/Okta).
+   - **401.3 / 403.1–403.3** — NTFS or IIS execute/read/write (then see `permissions.md`).
+   - **403.4 / 403.5** — SSL required.
+   - **404.0 / 404.4** — missing file or no handler.
+   - **500.0 / 500.19** — module error or bad `web.config` / `applicationHost.config`.
+   - **500.11 / 500.12 / 503.0** — app pool shutting down, restarting, or stopped.
+   - **502.x** — bad gateway / ARR / timeout talking to a backend (then see `vendor_api.md`).
+   - **408** — request timed out at IIS (then see `sql_timeout.md` if the page was waiting on SQL).
+3. Check app-pool identity, site bindings, and whether the worker process is running.
+4. Do not paste PAN, passwords, or full `web.config` connection strings into this copilot. See `pci_do_not_paste_pan.md`.
+5. Look up the exact code in the catalog below.
+
+---
+
 HTTP Status Codes
 Code	Description	Notes
 100	Continue	Initial part of the request has been received and hasn't yet been rejected by the server. The server intends to send a final response after the request has been fully received and acted upon.

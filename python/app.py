@@ -3,6 +3,8 @@
 import argparse
 from pathlib import Path
 from dotenv import load_dotenv
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 ROOT = Path(__file__).resolve().parents[1]
 load_dotenv(ROOT / ".env")
@@ -70,6 +72,67 @@ def load_runbooks(root: Path) -> list[dict]:
     return loaded
 
 
+def chunk_runbooks(runbooks: list[dict]) -> list[dict[str, str]]:
+    """Split each runbook on ## headings. Files with no ## stay one chunk."""
+    chunks: list[dict[str, str]] = []
+    for book in runbooks:
+        heading = book["name"]
+        lines: list[str] = []
+        for line in book["text"].splitlines():
+            if line.startswith("## "):
+                text = "\n".join(lines).strip()
+                if text:
+                    chunks.append({
+                        "name": book["name"],
+                        "heading": heading,
+                        "text": text,
+                    })
+                heading = line[3:].strip()
+                lines = [line]
+            else:
+                lines.append(line)
+        text = "\n".join(lines).strip()
+        if text:
+            chunks.append({
+                "name": book["name"],
+                "heading": heading,
+                "text": text,
+            })
+    return chunks
+
+
+def retrieve(
+    incident_text: str,
+    chunks: list[dict[str, str]],
+    k: int = 3,
+) -> list[dict]:
+    """Return the k runbook chunks closest to the incident text."""
+    if not chunks:
+        return []
+
+    corpus = [chunk["text"] for chunk in chunks]
+    vectorizer = TfidfVectorizer(stop_words="english")
+    chunk_vectors = vectorizer.fit_transform(corpus)
+    incident_vector = vectorizer.transform([incident_text])
+    scores = cosine_similarity(incident_vector, chunk_vectors)[0]
+
+    ranked = sorted(
+        zip(scores, chunks),
+        key=lambda pair: pair[0],
+        reverse=True,
+    )
+
+    hits = []
+    for score, chunk in ranked[:k]:
+        hits.append({
+            "name": chunk["name"],
+            "heading": chunk["heading"],
+            "text": chunk["text"],
+            "score": float(score),
+        })
+    return hits
+
+
 def main() -> None:
     args = parse_args()
     path = resolve_incident_path(args.incident, ROOT)
@@ -81,8 +144,10 @@ def main() -> None:
     print(text)
 
     runbooks = load_runbooks(ROOT)
-    for book in runbooks:
-        print(book["name"], len(book["text"]))
+    chunks = chunk_runbooks(runbooks)
+    hits = retrieve(text, chunks, k=3)
+    for hit in hits:
+        print(hit["name"], hit["heading"], round(hit["score"], 3))
 
 
 if __name__ == "__main__":

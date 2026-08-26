@@ -53,6 +53,31 @@ def extract_incident_id(text: str) -> str:
             return line.split(":", 1)[1].strip() or "unknown"
     return "unknown"
 
+
+"""
+Load the Runbooks
+"""
+def load_runbooks(root: Path) -> list[dict]:
+    runbooks_dir = root / "runbooks"
+    if not runbooks_dir.is_dir():
+        raise FileNotFoundError(f"runbooks folder not found: {runbooks_dir}")
+
+    loaded = []
+    for path in sorted(runbooks_dir.glob("*.md")):
+        text = path.read_text(encoding="utf-8")
+        if not text.strip():
+            continue
+        loaded.append({
+            "path": path,
+            "name": path.name,
+            "text": text,
+        })
+
+    if not loaded:
+        raise ValueError(f"no runbook markdown files in {runbooks_dir}")
+    return loaded
+
+
 """
 Call MAIN
 """
@@ -66,6 +91,11 @@ def main() -> None:
     print()
     print(text)
 
-
 if __name__ == "__main__":
     main()
+"""
+Call loading of Runbooks
+"""
+runbooks = load_runbooks(ROOT)
+for book in runbooks:
+    print(book["name"], len(book["text"]))

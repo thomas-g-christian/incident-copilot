@@ -1,17 +1,14 @@
+"""Incident copilot CLI: load a ticket and local support runbooks."""
+
 import argparse
 from pathlib import Path
 from dotenv import load_dotenv
 
-"""
-Set the project root
-"""
 ROOT = Path(__file__).resolve().parents[1]
 load_dotenv(ROOT / ".env")
 
-"""
-Parse the incident
-"""
-def parse_args() ->argparse.Namespace:
+
+def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Incident copilot")
     parser.add_argument(
         "--incident",
@@ -20,10 +17,9 @@ def parse_args() ->argparse.Namespace:
     )
     return parser.parse_args()
 
-"""
-Resolve the path
-"""
+
 def resolve_incident_path(raw: str, root: Path) -> Path:
+    """Resolve --incident to an absolute path (cwd first, then project root)."""
     path = Path(raw)
     if path.is_absolute():
         return path
@@ -31,11 +27,10 @@ def resolve_incident_path(raw: str, root: Path) -> Path:
     if cwd_path.is_file():
         return cwd_path.resolve()
     return (root / path).resolve()
- 
-"""
-Read the ticket
-"""
+
+
 def load_incident(path: Path) -> str:
+    """Read the incident file. Raises if missing or empty."""
     if not path.is_file():
         raise FileNotFoundError(f"incident file not found: {path}")
     text = path.read_text(encoding="utf-8")
@@ -43,10 +38,9 @@ def load_incident(path: Path) -> str:
         raise ValueError(f"Incident file is empty: {path}")
     return text
 
-"""
-Incident ID
-"""
+
 def extract_incident_id(text: str) -> str:
+    """Return the Ticket Number: value, or 'unknown'."""
     for line in text.splitlines():
         line = line.strip()
         if line.lower().startswith("ticket number:"):
@@ -54,10 +48,8 @@ def extract_incident_id(text: str) -> str:
     return "unknown"
 
 
-"""
-Load the Runbooks
-"""
 def load_runbooks(root: Path) -> list[dict]:
+    """Load non-empty *.md files from <root>/runbooks."""
     runbooks_dir = root / "runbooks"
     if not runbooks_dir.is_dir():
         raise FileNotFoundError(f"runbooks folder not found: {runbooks_dir}")
@@ -78,9 +70,6 @@ def load_runbooks(root: Path) -> list[dict]:
     return loaded
 
 
-"""
-Call MAIN
-"""
 def main() -> None:
     args = parse_args()
     path = resolve_incident_path(args.incident, ROOT)
@@ -91,11 +80,10 @@ def main() -> None:
     print()
     print(text)
 
+    runbooks = load_runbooks(ROOT)
+    for book in runbooks:
+        print(book["name"], len(book["text"]))
+
+
 if __name__ == "__main__":
     main()
-"""
-Call loading of Runbooks
-"""
-runbooks = load_runbooks(ROOT)
-for book in runbooks:
-    print(book["name"], len(book["text"]))

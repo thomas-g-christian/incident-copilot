@@ -8,8 +8,8 @@ This is **not** another model-training lab. `grok-python-lab` stays the “I mea
 
 ## Status
 
-- **Done:** PyCharm + `.venv`, live `XAI_API_KEY`, `python/hello_grok.py`, GitHub [incident-copilot](https://github.com/thomas-g-christian/incident-copilot.git), `runbooks/` (IIS, Okta, SQL 0–999, SQL timeout, permissions, vendor API, PCI).
-- **Next:** `samples/` + `python/app.py` (retrieve runbooks → Grok → JSONL log).
+- **Done:** PyCharm + `.venv`, live `XAI_API_KEY`, `python/hello_grok.py`, GitHub [incident-copilot](https://github.com/thomas-g-christian/incident-copilot.git), `runbooks/` (IIS, Okta, SQL 0–999, SQL timeout, permissions, vendor API, PCI), `samples/` (4 fake tickets), `python/app.py` CLI + TF-IDF retrieval (top 3 chunks).
+- **Next:** Grok prompt (incident + retrieved chunks) → JSONL log.
 - **Not started:** Week 2 evals, Week 3 C#.
 
 See [PLAN.md](PLAN.md) for the full checklist.

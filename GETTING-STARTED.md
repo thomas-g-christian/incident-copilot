@@ -7,7 +7,7 @@ A Grok *chat* login (grok.com or this TUI) is **not** an API key. The incident c
 
 Official docs (check if screens move): [Quickstart](https://docs.x.ai/developers/quickstart) · [API Keys](https://console.x.ai/team/default/api-keys) · [Models](https://docs.x.ai/developers/models)
 
-**Status:** Hour 1 is done. Live Grok call works (`python/hello_grok.py`). Interpreter: `.\.venv`. Next: [PLAN.md](PLAN.md) Week 1 remaining items (`samples/` + `app.py`).
+**Status:** Hour 1 is done. Live Grok call works (`python/hello_grok.py`). Interpreter: `.\.venv`. CLI + TF-IDF retrieval work in `python/app.py`. Next: [PLAN.md](PLAN.md) Week 1 remaining items (Grok prompt + JSONL log).
 
 ---
 

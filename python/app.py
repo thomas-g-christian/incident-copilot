@@ -35,10 +35,23 @@ def resolve_incident_path(raw: str, root: Path) -> Path:
 """
 Read the ticket
 """
+def load_incident(path: Path) -> str:
+    if not path.is_file():
+        raise FileNotFoundError(f"incident file not found: {path}")
+    text = path.read_text(encoding="utf-8")
+    if not text.strip():
+        raise ValueError(f"Incident file is empty: {path}")
+    return text
 
 """
 Incident ID
 """
+def extract_incident_id(text: str) -> str:
+    for line in text.splitlines():
+        line = line.strip()
+        if line.lower().startswith("ticket number:"):
+            return line.split(":", 1)[1].strip() or "unknown"
+    return "unknown"
 
 """
 Call MAIN

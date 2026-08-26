@@ -56,3 +56,16 @@ def extract_incident_id(text: str) -> str:
 """
 Call MAIN
 """
+def main() -> None:
+    args = parse_args()
+    path = resolve_incident_path(args.incident, ROOT)
+    text = load_incident(path)
+    ticket_id = extract_incident_id(text)
+    print(f"Incident ID: {ticket_id}")
+    print(f"File: {path}")
+    print()
+    print(text)
+
+
+if __name__ == "__main__":
+    main()

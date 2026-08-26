@@ -4,7 +4,15 @@ Work folder: `.`
 
 This is **not** another model-training lab. `grok-python-lab` stays the “I measured a toy model” repo. This folder is the **Forward Deployed / .NET AI integration / AI application support** artifact: an incident copilot with retrieval, logging, and a scored eval.
 
-**Order:** Python first (PyCharm), C# second (Visual Studio 2022). Same runbooks, same eval cases, same xAI (Grok) API.
+**Order:** Python first (PyCharm), C# second (JetBrains Rider 2026.2). Same runbooks, same eval cases, same xAI (Grok) API.
+
+## Status
+
+- **Done:** PyCharm + `.venv`, live `XAI_API_KEY`, `python/hello_grok.py`, GitHub [incident-copilot](https://github.com/thomas-g-christian/incident-copilot.git), `runbooks/` (IIS, Okta, SQL 0–999, SQL timeout, permissions, vendor API, PCI).
+- **Next:** `samples/` + `python/app.py` (retrieve runbooks → Grok → JSONL log).
+- **Not started:** Week 2 evals, Week 3 C#.
+
+See [PLAN.md](PLAN.md) for the full checklist.
 
 ## Goal
 
@@ -44,7 +52,8 @@ FDE_Ai_intergration/
   samples/                  fake incidents
 ```
 
-The public GitHub repo can be named `incident-copilot` (or similar). Keep this Windows folder as the working copy.
+Public GitHub: https://github.com/thomas-g-christian/incident-copilot.git  
+This Windows folder is the working copy.
 
 ## Stack
 
@@ -52,8 +61,8 @@ The public GitHub repo can be named `incident-copilot` (or similar). Keep this W
 |---|---|
 | Model | Grok via xAI (`XAI_API_KEY`, `https://api.x.ai/v1`) |
 | Python IDE | **PyCharm** (Community or Professional) |
-| Week 1–2 | Python 3.13, pytest, PyCharm venv at `python/.venv` |
-| Week 3 | C# console in Visual Studio 2022 |
+| Week 1–2 | Python (3.14 in this venv), pytest, PyCharm venv at `.venv` |
+| Week 3 | C# console in JetBrains Rider 2026.2 |
 | Retrieval | Keyword / TF-IDF first. Vectors only if time is left. |
 | Secrets | `.env` gitignored. Never commit keys. |
 

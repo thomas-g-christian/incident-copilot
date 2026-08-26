@@ -1,0 +1,11 @@
+Ticket Number: API000-42448
+##################################################################
+
+Date: 08/24/2026 13:06:35
+Title: Portal page hangs
+
+Application: DataPortal
+Team Queue: Database Admin
+Description of Issue: We are trying to pull data from DataPortal, but the page hangs and becomes unresponsive. IIS returns 408. The SQL call behind the page then fails with: Execution Timeout Expired. The timeout period elapsed prior to completion of the operation or the server is not responding.
+
+Software version: DPv6.99.45

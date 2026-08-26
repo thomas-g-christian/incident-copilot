@@ -7,6 +7,8 @@ A Grok *chat* login (grok.com or this TUI) is **not** an API key. The incident c
 
 Official docs (check if screens move): [Quickstart](https://docs.x.ai/developers/quickstart) · [API Keys](https://console.x.ai/team/default/api-keys) · [Models](https://docs.x.ai/developers/models)
 
+**Status:** Hour 1 is done. Live Grok call works (`python/hello_grok.py`). Interpreter: `.\.venv`. Next: [PLAN.md](PLAN.md) Week 1 remaining items (`samples/` + `app.py`).
+
 ---
 
 ## 1. Create an xAI account
@@ -117,7 +119,7 @@ Run `python/hello_grok.py` from this project. It loads `.\.env` (one folder abov
 
 Confirm the current model name on [Models](https://docs.x.ai/developers/models) if `grok-4.6` 404s.
 
-**Done when:** PyCharm run prints a short hello. Then go to [PLAN.md](PLAN.md) Week 1.
+**Done when:** PyCharm run prints a short hello. **This is complete.** Then go to [PLAN.md](PLAN.md) Week 1 remaining items.
 
 ---
 
@@ -129,4 +131,4 @@ Confirm the current model name on [Models](https://docs.x.ai/developers/models) 
 | 402 / credits / billing | Balance is $0 — add credits in console |
 | 404 model | Model id changed — check docs.x.ai/developers/models |
 | Key in GitHub | Revoke it **now** in the console, make a new key, `git filter` is not enough if it was pushed — rotate |
-| PyCharm “no module openai” | Interpreter is not the `python/.venv` you pip-installed into |
+| PyCharm “no module …” | Interpreter is not `.\.venv` |

@@ -1,0 +1,12 @@
+Ticket Number: API000-42447
+##################################################################
+
+Date: 08/21/2026 10:25:04
+Title: Session terminated trying to connect to Secret Server.
+
+Application: Secret Server
+Team Queue: Infrastructure Server Team
+
+Description of Issue: We are trying to SSO into Secret Server to retrieve passwords, but we get an access denied message (HTTP 401), and the session terminates with OKTA E0000011 Invalid token provided.
+
+Software version: 12.1.000002

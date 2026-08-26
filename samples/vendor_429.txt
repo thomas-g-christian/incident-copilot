@@ -1,0 +1,12 @@
+Ticket Number: API000-42449
+##################################################################
+
+Date: 08/25/2026 09:18:00
+Title: BeterBarter FX has not received funds.
+
+Application: TrueFX
+Team Queue: Amazon Web Services
+
+Description of Issue: Customer submitted a transaction, and they have not seen the funds arrive. Our outbound POST to the BeterBarter FX vendor API returned HTTP 429 Too Many Requests with Retry-After: 60. Callers then guessed port 13547 might be closed, but our IIS site is fine.
+
+Software version: tFX.4.2

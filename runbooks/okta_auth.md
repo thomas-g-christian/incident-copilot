@@ -4,6 +4,16 @@ Source (official): https://developer.okta.com/docs/reference/error-codes/
 
 Use this when an incident mentions Okta, SSO, OAuth, JWT, 401, 403, invalid token, MFA, password expired, or Okta error codes like E0000004 / E0000011.
 
+## Invalid token (E0000011) and SSO 401
+
+Use this chunk when SSO, Okta, Secret Server, HTTP 401, **invalid token**, or **E0000011**.
+
+1. Capture HTTP status, `errorCode`, `errorSummary`, and **errorId** from the API body. `errorId` is what Okta Support uses.
+2. **E0000011** = Invalid token provided (401). Check the Authorization header, expiry, and whether the token was issued for this client/app. Session terminated after SSO often lands here, not on NTFS.
+3. Related 401/403: E0000004 authentication failed, E0000005 invalid session, E0000006 access denied, E0000064 password expired, E0000068 MFA, E0000069 user locked.
+4. Do not paste the token. If it was pasted, rotate it (`pci_do_not_paste_pan.md`).
+5. Full catalog is below. IIS 401.x without an Okta `errorCode` is `iis_codes.md`.
+
 ## Support next steps (incident copilot)
 
 1. Capture HTTP status, `errorCode`, `errorSummary`, and `errorId` from the API body. `errorId` is what Okta Support uses.

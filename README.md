@@ -8,11 +8,9 @@ This is **not** another model-training lab. `grok-python-lab` stays the “I mea
 
 ## Status
 
-- **Done:** Week 1 CLI (retrieve → Grok → `logs/copilot.jsonl`). Week 2 eval harness: `evals/cases.jsonl` (10 cases) and `python/eval.py`.
-- **Eval (Week 1 retrieval, before fix):** **8/10**. Two misses are retrieval, not “prompt harder”:
-  - `okta-invalid-token` — TF-IDF never ranked `okta_auth.md`; answer missed `errorId`.
-  - `arr-502-vendor` — ranked vendor 5xx only; answer missed IIS `sc-substatus`.
-- **Next:** split those runbook sections so the right chunk ranks, re-run eval, record after-score here.
+- **Done:** Week 1 CLI (retrieve → Grok → `logs/copilot.jsonl`). Week 2 eval: `evals/cases.jsonl` (10 cases), `python/eval.py`.
+- **Eval:** **8/10 → 10/10**. Two misses were retrieval. Split `okta_auth.md` (Invalid token / E0000011) and `iis_codes.md` (502 / ARR / bad gateway), then both ranked.
+- **Next:** Week 3 C# console (same runbooks, same samples).
 - **Not started:** Week 3 C#.
 
 See [PLAN.md](PLAN.md) for the full checklist.
@@ -28,7 +26,7 @@ Build a small product that looks like application support:
 
 Interview sentence:
 
-> I took the support loop — reproduce, search the runbook, try a fix, see if it worked — and put an LLM in the search-and-suggest step. Retrieval plus a 10-case eval. It failed two cases until I split a runbook. Score went from X/10 to Y/10.
+> I took the support loop — reproduce, search the runbook, try a fix, see if it worked — and put an LLM in the search-and-suggest step. Retrieval plus a 10-case eval. It failed two cases until I split a runbook. Score went from 8/10 to 10/10.
 
 ## What this is not
 

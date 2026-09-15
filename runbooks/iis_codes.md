@@ -2,6 +2,15 @@
 
 Use this catalog when the incident is an IIS / ASP.NET site status (401.x, 403.x, 404.x, 500.x, 502.x, 503.x). Substatus lives in the IIS log (`sc-status` and `sc-substatus`), not always in the browser.
 
+## 502 / ARR / bad gateway
+
+Use this chunk when IIS or ARR returns **502**, **502.3**, bad gateway, or a forwarder connection error while proxying to a vendor.
+
+1. Get **sc-status** and **sc-substatus** from the IIS log (W3C: `sc-status sc-substatus sc-win32-status`). Browser “502” is not enough.
+2. **502.3** = Bad Gateway: Forwarder Connection Error (ARR). **502.4** = No Server (ARR). Site bindings can be fine while ARR still returns 502.3.
+3. We were the proxy; the backend or vendor did not complete. Capture the vendor request id, then use `vendor_api.md` for the vendor body/SLA.
+4. Do not skip the IIS substatus just because the ticket already names a vendor.
+
 ## Support next steps (incident copilot)
 
 1. Get the **status and substatus** from the IIS log (W3C: `sc-status sc-substatus sc-win32-status`). Browser “500” is not enough.

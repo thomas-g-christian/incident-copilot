@@ -186,13 +186,27 @@ def ask_grok(incident_text: str, hits: list[dict]) -> tuple[str, float]:
     return answer, latency_s
 
 
-def append_jsonl(record: dict) -> Path:
-    """Append one JSON object to logs/copilot.jsonl."""
+def append_jsonl(record: dict, filename: str = "copilot.jsonl") -> Path:
+    """Append one JSON object to logs/<filename>."""
     LOG_DIR.mkdir(exist_ok=True)
-    path = LOG_DIR / "copilot.jsonl"
+    path = LOG_DIR / filename
     with path.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(record, ensure_ascii=False) + "\n")
     return path
+
+
+def run_copilot(incident_text: str, k: int = 3) -> dict:
+    """Retrieve top-k chunks and ask Grok. Shared by the CLI and eval."""
+    runbooks = load_runbooks(ROOT)
+    chunks = chunk_runbooks(runbooks)
+    hits = retrieve(incident_text, chunks, k=k)
+    answer, latency_s = ask_grok(incident_text, hits)
+    return {
+        "hits": hits,
+        "answer": answer,
+        "latency_s": latency_s,
+        "model": MODEL,
+    }
 
 
 def main() -> None:
@@ -205,19 +219,16 @@ def main() -> None:
     print()
     print(text)
 
-    runbooks = load_runbooks(ROOT)
-    chunks = chunk_runbooks(runbooks)
-    hits = retrieve(text, chunks, k=3)
+    result = run_copilot(text, k=3)
     print()
     print("Retrieved:")
-    for hit in hits:
+    for hit in result["hits"]:
         print(f"  {hit['name']} / {hit['heading']}  {round(hit['score'], 3)}")
 
-    answer, latency_s = ask_grok(text, hits)
     print()
-    print(f"Model: {MODEL}  latency: {latency_s:.3f}s")
+    print(f"Model: {result['model']}  latency: {result['latency_s']:.3f}s")
     print()
-    print(answer)
+    print(result["answer"])
 
     log_path = append_jsonl({
         "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -229,11 +240,11 @@ def main() -> None:
                 "heading": hit["heading"],
                 "score": hit["score"],
             }
-            for hit in hits
+            for hit in result["hits"]
         ],
-        "model": MODEL,
-        "answer": answer,
-        "latency_s": round(latency_s, 3),
+        "model": result["model"],
+        "answer": result["answer"],
+        "latency_s": round(result["latency_s"], 3),
     })
     print()
     print(f"Logged: {log_path}")

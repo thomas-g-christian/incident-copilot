@@ -8,8 +8,11 @@ This is **not** another model-training lab. `grok-python-lab` stays the “I mea
 
 ## Status
 
-- **Done:** PyCharm + `.venv`, live `XAI_API_KEY`, `python/hello_grok.py`, GitHub [incident-copilot](https://github.com/thomas-g-christian/incident-copilot.git), `runbooks/` (IIS, Okta, SQL 0–999, SQL timeout, permissions, vendor API, PCI), `samples/` (4 fake tickets), `python/app.py` CLI + TF-IDF retrieval + Grok prompt + `logs/copilot.jsonl`.
-- **Next:** Week 2 evals (`evals/cases.jsonl`, `python/eval.py`, before/after score in this README).
+- **Done:** Week 1 CLI (retrieve → Grok → `logs/copilot.jsonl`). Week 2 eval harness: `evals/cases.jsonl` (10 cases) and `python/eval.py`.
+- **Eval (Week 1 retrieval, before fix):** **8/10**. Two misses are retrieval, not “prompt harder”:
+  - `okta-invalid-token` — TF-IDF never ranked `okta_auth.md`; answer missed `errorId`.
+  - `arr-502-vendor` — ranked vendor 5xx only; answer missed IIS `sc-substatus`.
+- **Next:** split those runbook sections so the right chunk ranks, re-run eval, record after-score here.
 - **Not started:** Week 3 C#.
 
 See [PLAN.md](PLAN.md) for the full checklist.

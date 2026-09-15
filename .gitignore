@@ -6,6 +6,8 @@ python/.venv/
 *.pyc
 csharp/bin/
 csharp/obj/
+csharp/**/bin/
+csharp/**/obj/
 *.user
 *.suo
 .vs/

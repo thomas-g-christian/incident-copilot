@@ -10,7 +10,7 @@ This is a **Forward Deployed / .NET AI integration / application support** artif
 
 - **Done:** CLI (retrieve → Grok → `logs/copilot.jsonl`). Eval harness: `evals/cases.jsonl` (10 cases) and `python/eval.py`.
 - **Eval:** **8/10 → 10/10**. Two misses were retrieval. Split `okta_auth.md` (Invalid token / E0000011) and `iis_codes.md` (502 / ARR / bad gateway), then both ranked.
-- **Next:** C# console (same runbooks, same samples).
+- **Next:** C# console is running (`csharp/IncidentCopilot`). Polish: README architecture blurb, TALK-TRACK C# sentence, `ARCHITECTURE.md`.
 
 See [PLAN.md](PLAN.md) for the full checklist.
 
@@ -51,7 +51,13 @@ python python/app.py --incident samples/sql_timeout.txt
 python python/eval.py
 ```
 
-Key setup: [GETTING-STARTED.md](GETTING-STARTED.md).
+C# is the same retrieve → Grok → log loop on .NET (Python remains the eval harness):
+
+```powershell
+dotnet run --project csharp/IncidentCopilot -- --incident samples/sql_timeout.txt
+```
+
+Open `csharp/IncidentCopilot.sln` in JetBrains Rider. Key setup: [GETTING-STARTED.md](GETTING-STARTED.md).
 
 ## Layout
 
@@ -63,7 +69,7 @@ incident-copilot/
   TALK-TRACK.md
   requirements.txt
   python/          eval harness and CLI
-  csharp/          same loop on .NET (not started)
+  csharp/          same loop on .NET 9 (Rider)
   runbooks/        markdown knowledge base
   evals/           cases.jsonl
   samples/         invented incidents

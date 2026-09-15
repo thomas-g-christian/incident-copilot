@@ -62,6 +62,8 @@ dotnet run --project csharp/IncidentCopilot -- --incident samples/sql_timeout.tx
 
 Open `csharp/IncidentCopilot.sln` in JetBrains Rider. Key setup: [GETTING-STARTED.md](GETTING-STARTED.md).
 
+Raw HTTP (no SDK): import [postman/](postman/README.md). Set `xai_api_key` in Postman; do not commit it.
+
 ## Layout
 
 ```
@@ -77,6 +79,7 @@ incident-copilot/
   runbooks/        markdown knowledge base
   evals/           cases.jsonl
   samples/         invented incidents
+  postman/         raw Grok HTTP (canned SQL-timeout example)
 ```
 
 ## Stack

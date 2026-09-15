@@ -1,0 +1,77 @@
+{
+  "info": {
+    "name": "Incident Copilot — xAI Grok",
+    "description": "Raw HTTP for the same Grok call the Python SDK and C# HttpClient make. This is not retrieval: excerpts are canned. Set xai_api_key. Never commit a real key.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://api.x.ai/v1"
+    },
+    {
+      "key": "model",
+      "value": "grok-4.6"
+    },
+    {
+      "key": "xai_api_key",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Health — grok-4.6 hello",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{xai_api_key}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"model\": \"{{model}}\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Say hello in five words.\"\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{base_url}}/chat/completions",
+        "description": "Proves the key and model. Same idea as python/hello_grok.py."
+      }
+    },
+    {
+      "name": "Incident copilot — SQL timeout (canned retrieve)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{xai_api_key}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"model\": \"{{model}}\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are an application-support copilot for a banking portal.\\n\\nRules:\\n- Use ONLY the runbook excerpts in the user message.\\n- Cite the runbook filename (for example sql_timeout.md) on each recommended step.\\n- If the runbooks do not cover the issue, say you do not know. Do not invent procedures.\\n- Do not ask for PAN, SSN, passwords, or full customer records.\\n- Output short numbered diagnostic next steps. No preamble.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Incident:\\nTicket Number: API000-42448\\n##################################################################\\n\\nDate: 08/24/2026 13:06:35\\nTitle: Portal page hangs\\n\\nApplication: DataPortal\\nTeam Queue: Database Admin\\nDescription of Issue: We are trying to pull data from DataPortal, but the page hangs and becomes unresponsive. IIS returns 408. The SQL call behind the page then fails with: Execution Timeout Expired. The timeout period elapsed prior to completion of the operation or the server is not responding.\\n\\nSoftware version: DPv6.99.45\\n\\nRunbook excerpts:\\n--- [1] sql_timeout.md / Command / execution timeout ---\\n## Command / execution timeout\\n\\nSymptoms: `Execution Timeout Expired`; `Timeout expired. The timeout period elapsed prior to completion of the operation`. App `CommandTimeout` (often 30s) fired.\\n\\nCheck:\\n\\n- Query actually ran longer than the app timeout (blocking or a bad plan).\\n- Raising the timeout hides the cause; find the waiter first.\\n\\n--- [2] sql_timeout.md / IIS 408 vs SQL ---\\n## IIS 408 vs SQL\\n\\nIIS **408** = client did not finish sending the request in time (`iis_codes.md`). If the **browser** waited on our page and SQL was blocked, you usually see **500** + SQL timeout in the app log, not 408.\\n\\n--- [3] sql_timeout.md / sql_timeout.md ---\\n# SQL timeout / blocking\\n\\nUse this when the incident is a **timeout**, **blocking**, **lock wait**, `Execution Timeout Expired`, `OLE DB wait`, or IIS **408** on a page that hits SQL. Error **numbers 0–999** live in `sql_errors_0_to_999.md`; this file is the **wait/timeout playbook** (including 1205 deadlock, which is outside 0–999).\\n\\nDo not paste PAN, full result sets, or connection strings with passwords. See `pci_do_not_paste_pan.md`.\\n\"\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": "{{base_url}}/chat/completions",
+        "description": "Same system prompt as GrokClient.cs / python/app.py. User message is samples/sql_timeout.txt plus the three sql_timeout.md chunks those apps rank. Postman does not run TF-IDF."
+      }
+    }
+  ]
+}

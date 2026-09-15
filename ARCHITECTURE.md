@@ -27,6 +27,7 @@ incident .txt  →  chunk runbooks (## headings)
 | `evals/cases.jsonl` | Python eval only |
 | `.env` | `XAI_API_KEY` (gitignored) |
 | `logs/copilot.jsonl` | Audit log (gitignored) |
+| `postman/` | Raw `chat/completions` (canned excerpts; not retrieval) |
 
 ## Production notes (not implemented)
 

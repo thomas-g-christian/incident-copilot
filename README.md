@@ -8,24 +8,27 @@ This is a **Forward Deployed / .NET AI integration / application support** artif
 
 ## Status
 
-- **Done:** CLI (retrieve → Grok → `logs/copilot.jsonl`). Eval harness: `evals/cases.jsonl` (10 cases) and `python/eval.py`.
-- **Eval:** **8/10 → 10/10**. Two misses were retrieval. Split `okta_auth.md` (Invalid token / E0000011) and `iis_codes.md` (502 / ARR / bad gateway), then both ranked.
-- **Next:** C# console is running (`csharp/IncidentCopilot`). Polish: README architecture blurb, TALK-TRACK C# sentence, `ARCHITECTURE.md`.
+- **Python:** CLI + 10-case eval. **8/10 → 10/10** after splitting two runbook sections.
+- **C#:** Same retrieve → Grok → log loop on .NET 9 (`csharp/IncidentCopilot.sln`, Rider).
+- **Eval:** Python is the harness. C# is the production-shaped client.
 
-See [PLAN.md](PLAN.md) for the full checklist.
+See [PLAN.md](PLAN.md) and [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Public data
 
 All tickets in `samples/` and `evals/` are **invented**. No real bank logs, customer records, or API keys. The refusal case uses the well-known Visa test PAN `4111…` and a fake SSN so the copilot can be scored for refusing them. `.env` is gitignored.
 
-## Goal
+## Problem
 
-Build a small product that looks like application support:
+Application support already has the loop: reproduce, search the runbook, try a step, see if it worked. Wiki search is slow and the model is confidently wrong if you dump the whole catalog into the prompt. This repo puts Grok in the **search-and-suggest** step only, with retrieval and a scored eval.
 
-1. Paste an incident (log, error, ticket text).
-2. Retrieve 2–4 relevant snippets from local markdown runbooks.
-3. Ask Grok for next diagnostic steps, using only those snippets.
-4. Score answers on a tiny eval set. Show one failure, fix the runbook/retrieval, show the score move.
+## Architecture
+
+1. Paste an incident (invented ticket text).
+2. Chunk local markdown runbooks on `## ` headings.
+3. Rank the top 3 chunks (TF-IDF). No vector database.
+4. Ask Grok for next diagnostic steps; it may use only those chunks and must cite filenames.
+5. Log the call. Score 10 cases in Python. Two failed until a runbook split; **8/10 → 10/10**.
 
 Interview sentence:
 
@@ -66,6 +69,7 @@ incident-copilot/
   README.md
   GETTING-STARTED.md
   PLAN.md
+  ARCHITECTURE.md
   TALK-TRACK.md
   requirements.txt
   python/          eval harness and CLI
@@ -93,9 +97,17 @@ incident-copilot/
 | Runbooks + retrieval | Knowledge-base / TAG-style issue research |
 | Incident → next steps | On-call, SQL, Fiddler/Postman |
 | Fail then fix context | Same loop as measuring a bad wiki |
-| C# client (next) | Banking .NET and IIS estate |
+| C# client | Banking .NET and IIS estate |
 | Refusal / PCI sample | Regulated banking |
 
 Do not put real employer logs in this repo.
+
+## Production notes (not implemented)
+
+- Redact PAN, SSN, and passwords before the prompt
+- Keep prompt/answer logs under a retention policy
+- A human clicks “apply” before any mutating command
+- Put Okta in front if this were an internal API
+- Run eval in CI so a prompt change cannot silently regress
 
 xAI docs: https://docs.x.ai/developers/quickstart · Models: https://docs.x.ai/developers/models

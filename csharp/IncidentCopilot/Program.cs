@@ -37,6 +37,13 @@ internal static class Program
     {
         var repoRoot = Repo.FindRoot();
         DotEnv.Load(Path.Combine(repoRoot, ".env"));
+        if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("XAI_API_KEY")))
+        {
+            throw new InvalidOperationException(
+                "XAI_API_KEY is missing.\n" +
+                $"Put one line in {Path.Combine(repoRoot, ".env")}:\n" +
+                "XAI_API_KEY=your_key_here");
+        }
 
         var path = Repo.ResolveIncidentPath(incidentArg, repoRoot);
         var text = Repo.LoadIncident(path);

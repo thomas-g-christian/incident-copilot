@@ -7,7 +7,7 @@ A Grok *chat* login (grok.com or this TUI) is **not** an API key. The incident c
 
 Official docs (check if screens move): [Quickstart](https://docs.x.ai/developers/quickstart) · [API Keys](https://console.x.ai/team/default/api-keys) · [Models](https://docs.x.ai/developers/models)
 
-**Status:** CLI and evals are done (**8/10 → 10/10**). Use a venv at the repo root (`.venv`). Next: [PLAN.md](PLAN.md) C#.
+**Status:** Python CLI, evals (**8/10 → 10/10**), and the C# console are done. Use a venv at the repo root (`.venv`). C#: `csharp/IncidentCopilot.sln` in Rider.
 
 ---
 

@@ -7,7 +7,7 @@ A Grok *chat* login (grok.com or this TUI) is **not** an API key. The incident c
 
 Official docs (check if screens move): [Quickstart](https://docs.x.ai/developers/quickstart) · [API Keys](https://console.x.ai/team/default/api-keys) · [Models](https://docs.x.ai/developers/models)
 
-**Status:** Hour 1, Week 1 CLI, and Week 2 evals are done (**8/10 → 10/10**). Interpreter: `.\.venv`. Next: [PLAN.md](PLAN.md) Week 3 C#.
+**Status:** CLI and evals are done (**8/10 → 10/10**). Use a venv at the repo root (`.venv`). Next: [PLAN.md](PLAN.md) C#.
 
 ---
 
@@ -48,78 +48,63 @@ If you lose it, **revoke** that key in the console and create a new one. Do not 
 
 ---
 
-## 4. Put the key in this folder (Windows)
+## 4. Put the key in the cloned folder
 
-In PowerShell:
+From the repository root (PowerShell):
 
 ```powershell
-cd .
-@"
-XAI_API_KEY=paste_the_key_here_no_quotes
-"@ | Set-Content -Path .env -Encoding utf8
+copy .env.example .env
 ```
 
-Replace `paste_the_key_here_no_quotes` with the real key. No spaces around `=`.
+Then edit `.env` so it has one line, no quotes, no spaces around `=`:
 
-Check that `.gitignore` lists `.env` (it already does). Confirm Git will not stage it:
+```
+XAI_API_KEY=paste_the_key_here_no_quotes
+```
+
+Confirm Git will not stage it:
 
 ```powershell
 git check-ignore -v .env
 ```
 
-You want a hit on `.gitignore`. If `git` is not on PATH, use `C:\Program Files\Git\cmd\git.exe`.
+You want a hit on `.gitignore`.
 
-Also create a dummy for the repo (no secret):
-
-```powershell
-@"
-XAI_API_KEY=
-"@ | Set-Content -Path .env.example -Encoding utf8
-```
-
-**Never** commit `.env`. **Never** put the key in source files.
-
-You can reuse the same key later in `grok-python-lab\.env` if you want that lab live too. Prefer one key per project if you like easy revoke.
+**Never** commit `.env`. **Never** put the key in source files. Prefer one key per project so it is easy to revoke.
 
 ---
 
 ## 5. Open the project in PyCharm
 
 1. Start **PyCharm**.
-2. **File → Open** and choose `.` (the folder, not a single file).
+2. **File → Open** and choose the cloned `incident-copilot` folder (the folder, not a single file).
 3. Trust the project if PyCharm asks.
 4. **File → Settings → Project → Python Interpreter**
-   - Use the project venv PyCharm created: `.\.venv`
+   - Use the project venv: `<repo>\.venv`
    - Python 3.13 or 3.14 is fine.
-5. Mark `python` as Sources Root when that package exists (**right-click `python` → Mark Directory as → Sources Root**).
-6. Load the env file for Run/Debug:
-   - **Run → Edit Configurations → Edit configuration templates → Python**
-   - Enable **EnvFile** if you have the EnvFile plugin, pointing at `.\.env`  
-   - **or** in the configuration **Environment variables**, click the folder icon and load from `.env`  
-   - **or** in code use `python-dotenv` (`load_dotenv()` from the project root `.env`).
+5. Mark `python` as Sources Root (**right-click `python` → Mark Directory as → Sources Root**).
+6. Load the env file for Run/Debug via `python-dotenv` (`load_dotenv()` from the repo-root `.env`). That is already in `python/app.py`.
 
-PyCharm Community: no EnvFile plugin required if you use `python-dotenv` in `app.py`. That is the simplest path.
-
-7. Do not check “Share” on run configurations that contain the key.
+Do not check “Share” on run configurations that contain the key.
 
 When you run a script, the console should see `XAI_API_KEY`. A missing key looks like `401` / `Unauthorized` / `api_key` errors, not a Python syntax error.
 
 ---
 
-## 6. Prove the key works (before Week 1 app code)
+## 6. Prove the key works
 
-After the venv exists, in PyCharm’s terminal (venv should be active):
+From the repo root, with the venv active:
 
 ```powershell
-cd .
-python -m pip install openai python-dotenv
+python -m pip install -r requirements.txt
+python python/hello_grok.py
 ```
 
-Run `python/hello_grok.py` from this project. It loads `.\.env` (one folder above the script). Do not hardcode the key.
+`hello_grok.py` loads `.env` from the repository root. Do not hardcode the key.
 
 Confirm the current model name on [Models](https://docs.x.ai/developers/models) if `grok-4.6` 404s.
 
-**Done when:** PyCharm run prints a short hello. **This is complete.** Then go to [PLAN.md](PLAN.md) Week 1 remaining items.
+**Done when:** the run prints a short hello. Then `python python/app.py --incident samples/sql_timeout.txt` and `python python/eval.py`.
 
 ---
 
@@ -131,4 +116,4 @@ Confirm the current model name on [Models](https://docs.x.ai/developers/models) 
 | 402 / credits / billing | Balance is $0 — add credits in console |
 | 404 model | Model id changed — check docs.x.ai/developers/models |
 | Key in GitHub | Revoke it **now** in the console, make a new key, `git filter` is not enough if it was pushed — rotate |
-| PyCharm “no module …” | Interpreter is not `.\.venv` |
+| PyCharm “no module …” | Interpreter is not the repo-root `.venv` |

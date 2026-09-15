@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from xai_sdk import Client
 from xai_sdk.chat import user
 
-# This file lives in python/. The .env file lives in the FDE project root.
+# This file lives in python/. The .env file lives at the repository root.
 ROOT = Path(__file__).resolve().parents[1]
 load_dotenv(ROOT / ".env")
 

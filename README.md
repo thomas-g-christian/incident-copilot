@@ -1,19 +1,22 @@
-# FDE / AI integration portfolio
+# Incident copilot
 
-Work folder: `.`
+Retrieve local support runbooks, ask Grok for next diagnostic steps, log the call, and score the answers.
 
-This is **not** another model-training lab. `grok-python-lab` stays the “I measured a toy model” repo. This folder is the **Forward Deployed / .NET AI integration / AI application support** artifact: an incident copilot with retrieval, logging, and a scored eval.
+This is a **Forward Deployed / .NET AI integration / application support** artifact — not a model-training lab.
 
-**Order:** Python first (PyCharm), C# second (JetBrains Rider 2026.2). Same runbooks, same eval cases, same xAI (Grok) API.
+**Order:** Python first (PyCharm), C# second (JetBrains Rider). Same runbooks, same eval cases, same xAI (Grok) API.
 
 ## Status
 
-- **Done:** Week 1 CLI (retrieve → Grok → `logs/copilot.jsonl`). Week 2 eval: `evals/cases.jsonl` (10 cases), `python/eval.py`.
+- **Done:** CLI (retrieve → Grok → `logs/copilot.jsonl`). Eval harness: `evals/cases.jsonl` (10 cases) and `python/eval.py`.
 - **Eval:** **8/10 → 10/10**. Two misses were retrieval. Split `okta_auth.md` (Invalid token / E0000011) and `iis_codes.md` (502 / ARR / bad gateway), then both ranked.
-- **Next:** Week 3 C# console (same runbooks, same samples).
-- **Not started:** Week 3 C#.
+- **Next:** C# console (same runbooks, same samples).
 
 See [PLAN.md](PLAN.md) for the full checklist.
+
+## Public data
+
+All tickets in `samples/` and `evals/` are **invented**. No real bank logs, customer records, or API keys. The refusal case uses the well-known Visa test PAN `4111…` and a fake SSN so the copilot can be scored for refusing them. `.env` is gitignored.
 
 ## Goal
 
@@ -33,28 +36,38 @@ Interview sentence:
 - A ChatGPT clone
 - Fine-tuning or training Grok
 - A React dashboard
-- Real Columbia Bank / Fiserv logs or customer data
+- Real employer logs or customer data
 
-Sanitized sample incidents only. Say so in the README of the public repo.
+## How to run
 
-## Layout (as you build)
-
-```
-FDE_Ai_intergration/
-  README.md                 this file
-  GETTING-STARTED.md        PyCharm + how to get XAI_API_KEY
-  PLAN.md                   week-by-week checklist
-  TALK-TRACK.md             90-second interview script
-  .gitignore
-  python/                   Week 1–2 (primary)
-  csharp/                   Week 3 (same API, same runbooks)
-  runbooks/                 shared markdown knowledge base
-  evals/                    shared cases.jsonl
-  samples/                  fake incidents
+```powershell
+python -m venv .venv
+.\.venv\Scripts\activate
+pip install -r requirements.txt
+copy .env.example .env
+# Put your key in .env: XAI_API_KEY=...
+python python/hello_grok.py
+python python/app.py --incident samples/sql_timeout.txt
+python python/eval.py
 ```
 
-Public GitHub: https://github.com/thomas-g-christian/incident-copilot.git  
-This Windows folder is the working copy.
+Key setup: [GETTING-STARTED.md](GETTING-STARTED.md).
+
+## Layout
+
+```
+incident-copilot/
+  README.md
+  GETTING-STARTED.md
+  PLAN.md
+  TALK-TRACK.md
+  requirements.txt
+  python/          eval harness and CLI
+  csharp/          same loop on .NET (not started)
+  runbooks/        markdown knowledge base
+  evals/           cases.jsonl
+  samples/         invented incidents
+```
 
 ## Stack
 
@@ -67,10 +80,16 @@ This Windows folder is the working copy.
 | Retrieval | Keyword / TF-IDF first. Vectors only if time is left. |
 | Secrets | `.env` gitignored. Never commit keys. |
 
-## Related
+## Mapping (career, not data)
 
-- Python lab (separate story): `grok-python-lab`
-- xAI docs: https://docs.x.ai/developers/quickstart
-- Models: https://docs.x.ai/developers/models
+| Piece | Why it is here |
+|---|---|
+| Runbooks + retrieval | Knowledge-base / TAG-style issue research |
+| Incident → next steps | On-call, SQL, Fiddler/Postman |
+| Fail then fix context | Same loop as measuring a bad wiki |
+| C# client (next) | Banking .NET and IIS estate |
+| Refusal / PCI sample | Regulated banking |
 
-Start at [GETTING-STARTED.md](GETTING-STARTED.md) (PyCharm + API key), then [PLAN.md](PLAN.md).
+Do not put real employer logs in this repo.
+
+xAI docs: https://docs.x.ai/developers/quickstart · Models: https://docs.x.ai/developers/models

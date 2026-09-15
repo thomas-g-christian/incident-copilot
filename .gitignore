@@ -1,5 +1,7 @@
 .env
 .venv/
+PLAN.md
+TALK-TRACK.md
 .idea/
 python/.venv/
 **/__pycache__/

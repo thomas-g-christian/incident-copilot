@@ -12,7 +12,7 @@ This is a **Forward Deployed / .NET AI integration / application support** artif
 - **C#:** Same retrieve → Grok → log loop on .NET 9 (`csharp/IncidentCopilot.sln`, Rider).
 - **Eval:** Python is the harness. C# is the production-shaped client.
 
-See [PLAN.md](PLAN.md) and [ARCHITECTURE.md](ARCHITECTURE.md).
+See [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Public data
 
@@ -70,9 +70,7 @@ Raw HTTP (no SDK): import [postman/](postman/README.md). Set `xai_api_key` in Po
 incident-copilot/
   README.md
   GETTING-STARTED.md
-  PLAN.md
   ARCHITECTURE.md
-  TALK-TRACK.md
   requirements.txt
   python/          eval harness and CLI
   csharp/          same loop on .NET 9 (Rider)
@@ -88,8 +86,8 @@ incident-copilot/
 |---|---|
 | Model | Grok via xAI (`XAI_API_KEY`, `https://api.x.ai/v1`) |
 | Python IDE | **PyCharm** (Community or Professional) |
-| Week 1–2 | Python (3.14 in this venv), pytest, PyCharm venv at `.venv` |
-| Week 3 | C# console in JetBrains Rider 2026.2 |
+| Python | 3.13/3.14, pytest, venv at `.venv` |
+| C# | .NET 9 console in JetBrains Rider |
 | Retrieval | Keyword / TF-IDF first. Vectors only if time is left. |
 | Secrets | `.env` gitignored. Never commit keys. |
 

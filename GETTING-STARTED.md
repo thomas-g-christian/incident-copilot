@@ -3,7 +3,7 @@
 Python IDE for this project: **PyCharm** (Professional or Community).  
 C# later: Jetbrains Rider 2026.2.
 
-A Grok *chat* login (grok.com or this TUI) is **not** an API key. The incident copilot calls `https://api.x.ai/v1` and needs a **console API key plus prepaid credits**.
+A Grok *chat* login on grok.com is **not** an API key. The incident copilot calls `https://api.x.ai/v1` and needs a **console API key plus prepaid credits**.
 
 Official docs (check if screens move): [Quickstart](https://docs.x.ai/developers/quickstart) · [API Keys](https://console.x.ai/team/default/api-keys) · [Models](https://docs.x.ai/developers/models)
 
